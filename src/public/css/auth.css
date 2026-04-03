@@ -1,0 +1,102 @@
+.auth-container {
+    max-width: 650px;
+    margin: 80px auto 0;
+    padding: 0 20px;
+}
+
+.auth-title {
+    text-align: center;
+    font-size: 30px;
+    margin-bottom: 40px;
+}
+
+.form-group {
+    margin-bottom: 30px;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.form-input {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #000;
+    border-radius: 5px;
+}
+
+.error-message {
+    display: block;
+    color: red;
+    font-size: 18px;
+    margin-top: 5px;
+}
+
+.register-button,
+.login-button {
+    width: 100%;
+    padding: 12px;
+    background-color: #000;
+    color: #fff;
+    font-size: 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 50px;
+}
+
+.login-link,
+.register-link,
+.resend-link {
+    display: block;
+    text-align: center;
+    margin-top: 30px;
+    color: #0888ff;
+    font-size: 20px;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.resend-link {
+    background: none;
+    border: none;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.login-form .form-group {
+    margin-bottom: 60px;
+}
+
+.verify-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: calc(100vh - 70px);
+    padding-top: 25vh;
+}
+
+.verify-message {
+    text-align: center;
+    font-size: 20px;
+    margin-bottom: 50px;
+    font-weight: bold;
+}
+
+.mail-button {
+    display: block;
+    margin: 0 auto 30px;
+    padding: 18px;
+    background-color: #d7d7d7;
+    color: #000;
+    font-size: 20px;
+    font-weight: bold;
+    border: #000 2px solid;
+    text-decoration: none;
+    border-radius: 7px;
+    cursor: pointer;
+}
