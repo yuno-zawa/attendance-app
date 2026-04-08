@@ -14,3 +14,4 @@ Route::post('/login', [LoginController::class, 'store']);
 Route::get('/attendance', function () {
     return view('attendance');
 });
+
