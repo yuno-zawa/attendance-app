@@ -30,21 +30,59 @@ class AttendanceController extends Controller
 
     public function checkIn(Request $request)
     {
-        // チェックイン処理の実装
+        Attendance::create([
+            'user_id' => Auth::id(),
+            'check_in' => Carbon::now(),
+        ]);
+
+        return redirect('/attendance');
     }
 
     public function checkOut(Request $request)
     {
-        // チェックアウト処理の実装
+        $attendance = Attendance::where('user_id', Auth::id())
+        ->WhereDate('check_in', Carbon::today())
+        ->first();
+
+        if ($attendance && !$attendance->check_out) {
+            $attendance->update([
+                'check_out' => Carbon::now(),
+            ]);
+        }
+
+        return redirect('/attendance');
     }
 
     public function breakIn(Request $request)
     {
-        // 休憩開始処理の実装
+        $attendance = Attendance::where('user_id', Auth::id())
+        ->WhereDate('check_in', Carbon::today())
+        ->first();
+
+        if ($attendance && !$attendance->check_out) {
+            $attendance->breakTimes()->create([
+                'break_in' => Carbon::now(),
+            ]);
+        }
+
+        return redirect('/attendance');
     }
 
     public function breakOut(Request $request)
     {
-        // 休憩終了処理の実装
+        $attendance = Attendance::where('user_id', Auth::id())
+        ->WhereDate('check_in', Carbon::today())
+        ->first();
+
+        if ($attendance) {
+            $breakTime = $attendance->breakTimes()->whereNull('break_out')->first();
+            if ($breakTime) {
+                $breakTime->update([
+                    'break_out' => Carbon::now(),
+                ]);
+            }
+        }
+
+        return redirect('/attendance');
     }
 }
