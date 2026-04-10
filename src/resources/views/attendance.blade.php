@@ -1,42 +1,48 @@
 @extends('layouts.app')
 
+@section('css')
+<link rel="stylesheet" href="{{ asset('css/attendance.css') }}">
+@endsection
+
 @section('content')
-<div class="container">
-    <div>
+<div class="attendance-container">
+    <div class="attendance-status">
         @if($status === 'off')
-            <p>勤務外</p>
+            勤務外
         @elseif($status === 'working')
-            <p>出勤中</p>
+            出勤中
         @elseif($status === 'break')
-            <p>休憩中</p>
+            休憩中
         @elseif($status === 'finished')
-            <p>退勤済</p>
+            退勤済
         @endif
     </div>
-    <div id="current-date"></div>
-    <div id="current-time"></div>
+    <div id="current-date" class="attendance-date"></div>
+    <div id="current-time" class="attendance-time"></div>
 
     @if($status === 'off')
         <form method="POST" action="/attendance/check-in">
             @csrf
-            <button type="submit">出勤</button>
+            <button type="submit" class="attendance-button">出勤</button>
         </form>
     @elseif($status === 'working')
+        <div class="attendance-buttons">
+            <form method="POST" action="/attendance/check-out">
+                @csrf
+                <button type="submit" class="attendance-button">退勤</button>
+            </form>
         <form method="POST" action="/attendance/break-in">
-            @csrf
-            <button type="submit">休憩入</button>
-        </form>
-        <form method="POST" action="/attendance/check-out">
-            @csrf
-            <button type="submit">退勤</button>
-        </form>
+                @csrf
+                <button type="submit" class="break-button">休憩入</button>
+            </form>
+        </div>
     @elseif($status === 'break')
         <form method="POST" action="/attendance/break-out">
             @csrf
-            <button type="submit">休憩戻</button>
+            <button type="submit" class="break-button">休憩戻</button>
         </form>
     @elseif($status === 'finished')
-        <p>お疲れ様でした。</p>
+        <p class="attendance-message">お疲れ様でした。</p>
     @endif
 </div>
 
