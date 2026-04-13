@@ -87,37 +87,53 @@ class AttendanceController extends Controller
     }
 
     public function list(Request $request)
-{
-    $month = $request->query('month', Carbon::now()->format('Y-m'));
-    $currentMonth = Carbon::parse($month);
+    {
+        $month = $request->query('month', Carbon::now()->format('Y-m'));
+        $currentMonth = Carbon::parse($month);
 
-    $attendances = Attendance::where('user_id', Auth::id())
-        ->whereYear('check_in', $currentMonth->year)
-        ->whereMonth('check_in', $currentMonth->month)
-        ->with('breakTimes')
-        ->get();
+        $attendances = Attendance::where('user_id', Auth::id())
+            ->whereYear('check_in', $currentMonth->year)
+            ->whereMonth('check_in', $currentMonth->month)
+            ->with('breakTimes')
+            ->orderBy('check_in', 'asc')
+            ->get();
 
-    foreach ($attendances as $attendance) {
-        $breakTotal = $attendance->breakTimes->reduce(function ($carry, $breakTime) {
-            if ($breakTime->break_out) {
-                return $carry + $breakTime->break_out->diffInMinutes($breakTime->break_in);
+        $daysInMonth = $currentMonth->daysInMonth;
+        $dailyAttendances = [];
+
+        for ($day = 1; $day <= $daysInMonth; $day++) {
+            $date = $currentMonth->copy()->day($day);
+            $attendance = $attendances->first(function ($a) use ($date) {
+                return $a->check_in->format('Y-m-d') === $date->format('Y-m-d');
+            });
+
+            if ($attendance) {
+                $breakTotal = $attendance->breakTimes->reduce(function ($carry, $breakTime) {
+                    if ($breakTime->break_out) {
+                        return $carry + (int) $breakTime->break_in->diffInMinutes($breakTime->break_out, true);
+                    }
+                    return $carry;
+                }, 0);
+
+                $attendance->break_total = floor($breakTotal / 60) . ':' . str_pad($breakTotal % 60, 2, '0', STR_PAD_LEFT);
+
+                if ($attendance->check_out) {
+                    $workTotal = (int) $attendance->check_in->diffInMinutes($attendance->check_out,     true) - $breakTotal;
+                    $attendance->work_total = floor($workTotal / 60) . ':' . str_pad($workTotal % 60, 2, '0', STR_PAD_LEFT);
+                } else {
+                    $attendance->work_total = '';
+                }
             }
-            return $carry;
-        }, 0);
 
-        $attendance->break_total = floor($breakTotal / 60) . ':' . str_pad($breakTotal % 60, 2, '0', STR_PAD_LEFT);
-
-        if ($attendance->check_out) {
-            $workTotal = $attendance->check_out->diffInMinutes($attendance->check_in) - $breakTotal;
-            $attendance->work_total = floor($workTotal / 60) . ':' . str_pad($workTotal % 60, 2, '0', STR_PAD_LEFT);
-        } else {
-            $attendance->work_total = '';
+            $dailyAttendances[] = [
+                'date' => $date,
+                'attendance' => $attendance,
+            ];
         }
+
+        $prevMonth = $currentMonth->copy()->subMonth()->format('Y-m');
+        $nextMonth = $currentMonth->copy()->addMonth()->format('Y-m');
+
+        return view('attendance_list', compact('dailyAttendances', 'currentMonth', 'prevMonth', 'nextMonth'));
     }
-
-    $prevMonth = $currentMonth->copy()->subMonth()->format('Y-m');
-    $nextMonth = $currentMonth->copy()->addMonth()->format('Y-m');
-
-    return view('attendance_list', compact('attendances', 'currentMonth', 'prevMonth', 'nextMonth'));
-}
 }

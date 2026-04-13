@@ -6,6 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class BreakTime extends Model
 {
+    protected $casts = [
+    'break_in' => 'datetime',
+    'break_out' => 'datetime',
+    ];
+
     protected $fillable = ['attendance_id', 'break_in', 'break_out'];
 
     public function attendance()

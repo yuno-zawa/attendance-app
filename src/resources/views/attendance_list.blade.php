@@ -10,7 +10,7 @@
 
     <div class="month-nav">
         <a href="/attendance/list?month={{ $prevMonth }}">← 前月</a>
-        <span>{{ $currentMonth->format('Y年m月') }}</span>
+        <span><i class="fa-regular fa-calendar"></i> {{ $currentMonth->format('Y/m') }}</span>
         <a href="/attendance/list?month={{ $nextMonth }}">翌月 →</a>
     </div>
 
@@ -26,33 +26,20 @@
             </tr>
         </thead>
         <tbody>
-            @foreach ($attendances as $attendance)
+            @foreach ($dailyAttendances as $day)
             <tr>
-                <td>{{ $attendance->check_in->format('m/d') }}</td>
-                <td>{{ $attendance->check_in->format('H:i') }}</td>
-                <td>{{ $attendance->check_out ? $attendance->check_out->format('H:i') : '' }}</td>
+                <td>{{ $day['date']->format('m/d') }}({{ $day['date']->isoFormat('ddd') }})</td>
+                <td>{{ $day['attendance'] ? $day['attendance']->check_in->format('H:i') : '' }}</td>
+                <td>{{ $day['attendance'] && $day['attendance']->check_out ? $day['attendance']->check_out->format('H:i') : '' }}</td>
+                <td>{{ $day['attendance'] ? $day['attendance']->break_total : '' }}</td>
+                <td>{{ $day['attendance'] ? $day['attendance']->work_total : '' }}</td>
                 <td>
-                    @php
-                        $breakTotal = $attendance->breakTimes->reduce(function ($carry, $breakTime) {
-                            if ($breakTime->break_out) {
-                                return $carry + $breakTime->break_out->diffInMinutes($breakTime->break_in);
-                            }
-                            return $carry;
-                        }, 0);
-                        echo floor($breakTotal / 60) . ':' . str_pad($breakTotal % 60, 2, '0', STR_PAD_LEFT);
-                    @endphp
+                    @if($day['attendance'])
+                            <a href="/attendance/detail/{{ $day['attendance']->id }}">詳細</a>
+                    @endif
                 </td>
-                <td>
-                    @php
-                        if ($attendance->check_out) {
-                            $workTotal = $attendance->check_out->diffInMinutes($attendance->check_in) - $breakTotal;
-                            echo floor($workTotal / 60) . ':' . str_pad($workTotal % 60, 2, '0', STR_PAD_LEFT);
-                        }
-                    @endphp
-                </td>
-                <td><a href="/attendance/detail/{{ $attendance->id }}">詳細</a></td>
             </tr>
-            @endforeach
+@endforeach
         </tbody>
     </table>
 </div>

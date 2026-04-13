@@ -1,6 +1,7 @@
 body {
-    background-color: #ededed;
+    background-color: #f0eff2;
 }
+
 .attendance-container {
     display: flex;
     flex-direction: column;
