@@ -5,8 +5,8 @@
 @endsection
 
 @section('content')
-<div class="attendance-list-container">
-    <h1 class="attendance-list-title">勤怠一覧</h1>
+<div class="list-container">
+    <h1 class="list-title">勤怠一覧</h1>
 
     <div class="month-nav">
         <a href="/attendance/list?month={{ $prevMonth }}">← 前月</a>

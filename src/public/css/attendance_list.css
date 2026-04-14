@@ -2,14 +2,14 @@ body {
     background-color: #f0eff2;
 }
 
-.attendance-list-container {
+.list-container {
     max-width: 1000px;
     margin: 100px auto;
     padding: 0 20px;
 
 }
 
-.attendance-list-title {
+.list-title {
     font-size: 35px;
     margin-bottom: 30px;
     padding-left: 15px;
