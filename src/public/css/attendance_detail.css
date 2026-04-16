@@ -1,0 +1,103 @@
+body {
+    background-color: #f0eff2;
+}
+
+.detail-container {
+    max-width: 1000px;
+    margin: 90px auto;
+    padding: 0 20px;
+}
+
+.detail-title {
+    font-size: 35px;
+    margin-bottom: 60px;
+    padding-left: 15px;
+    border-left: 7px solid #000;
+    display: inline-block;
+}
+
+.detail-table {
+    width: 100%;
+    background-color: white;
+    border-radius: 10px;
+    table-layout: fixed;
+}
+
+.detail-table th,
+.detail-table td {
+    padding: 25px 40px;
+    text-align: left;
+    border-bottom: 4px solid #dedede;
+    font-weight: bold;
+    height: 40px;
+    vertical-align: middle;
+}
+
+.detail-table th {
+    background-color: white;
+    color: #797979;
+    font-size: 20px;
+    border-radius: 10px;
+    width: 30%;
+}
+
+.detail-table td {
+    font-size: 20px;
+    color: #000000;
+    width: 70%;
+}
+
+.date-container {
+    display: flex;
+    align-items: baseline;
+    gap: 80px;
+}
+
+.detail-table td a {
+    color: #000;
+    text-decoration: none;
+}
+
+.detail-table input[type="time"],
+.detail-table textarea {
+    font-size: 18px;
+    padding: 8px 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-weight: bold;
+    font-family: inherit;
+}
+
+.detail-table input[type="time"]::-webkit-calendar-picker-indicator {
+    display: none;
+}
+
+
+.time-separator {
+    margin: 0 30px;
+}
+
+.detail-table textarea {
+    width: 100%;
+    min-height: 40px;
+    resize: vertical;
+    vertical-align: middle;
+}
+
+.detail-button {
+    display: block;
+    margin: 40px 0 0 auto;
+    padding: 12px 40px;
+    font-size: 20px;
+    font-weight: bold;
+    background-color: #000;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.detail-table tr:last-child th,
+.detail-table tr:last-child td {
+    border-bottom: none;
+}
