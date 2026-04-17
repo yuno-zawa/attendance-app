@@ -8,7 +8,7 @@
 <div class="detail-container">
     <h1 class="detail-title">勤怠詳細</h1>
 
-    <form method="POST" action="/stamp_correction_request/{{ $attendance->id }}">
+    <form method="POST" action="/stamp_correction_request/{{ $attendance->id }}" novalidate>
         @csrf
         <table class="detail-table">
             <tr>
@@ -30,6 +30,9 @@
                     <input type="time" name="check_in" value="{{ $attendance->check_in->format('H:i') }}">
                     <span class="time-separator">～</span>
                     <input type="time" name="check_out" value="{{ $attendance->check_out ? $attendance->check_out->format('H:i') : '' }}">
+                    @error('check_out')
+                        <span class="error-message">{{ $message }}</span>
+                    @enderror
                 </td>
             </tr>
             @foreach($attendance->breakTimes as $index => $breakTime)
@@ -39,6 +42,12 @@
                     <input type="time" name="break_in[]" value="{{ $breakTime->break_in->format('H:i') }}">
                     <span class="time-separator">～</span>
                     <input type="time" name="break_out[]" value="{{ $breakTime->break_out ? $breakTime->break_out->format('H:i') : '' }}">
+                    @error('break_in.*')
+                        <span class="error-message">{{ $message }}</span>
+                    @enderror
+                    @error('break_out.*')
+                        <span class="error-message">{{ $message }}</span>
+                    @enderror
                 </td>
             </tr>
             @endforeach
@@ -48,11 +57,21 @@
                     <input type="time" name="break_in[]" value="">
                     <span class="time-separator">～</span>
                     <input type="time" name="break_out[]" value="">
+                    @error('break_in.*')
+                        <span class="error-message">{{ $message }}</span>
+                    @enderror
+                    @error('break_out.*')
+                        <span class="error-message">{{ $message }}</span>
+                    @enderror
                 </td>
             </tr>
             <tr>
                 <th>備考</th>
-                <td><textarea name="note">{{ $attendance->note }}</textarea></td>
+                <td><textarea name="note">{{ $attendance->note }}</textarea>
+                    @error('note')
+                        <span class="error-message">{{ $message }}</span>
+                    @enderror
+                </td>
             </tr>
         </table>
 

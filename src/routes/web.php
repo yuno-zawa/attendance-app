@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\AttendanceController;
+use App\Http\Controllers\StampCorrectionRequestController;
 
 Route::get('/', function () {
     return redirect('/attendance');
@@ -21,4 +22,6 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/attendance/list', [AttendanceController::class, 'list']);
     Route::get('/attendance/detail/{id}', [AttendanceController::class, 'detail']);
+
+    Route::post('/stamp_correction_request/{id}', [StampCorrectionRequestController::class, 'store']);
 });

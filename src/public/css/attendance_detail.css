@@ -101,3 +101,14 @@ body {
 .detail-table tr:last-child td {
     border-bottom: none;
 }
+
+.error-messages {
+    margin-bottom: 20px;
+}
+
+.error-message {
+    display: block;
+    color: red;
+    font-size: 16px;
+    margin-bottom: 5px;
+}
