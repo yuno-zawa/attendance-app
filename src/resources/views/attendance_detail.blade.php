@@ -27,9 +27,9 @@
             <tr>
                 <th>出勤・退勤</th>
                 <td>
-                    <input type="time" name="check_in" value="{{ $attendance->check_in->format('H:i') }}">
+                    <input type="time" name="check_in" value="{{ $attendance->check_in->format('H:i') }}" {{ $attendance->correctRequest && $attendance->correctRequest->status === 'pending' ? 'readonly' : '' }}>
                     <span class="time-separator">～</span>
-                    <input type="time" name="check_out" value="{{ $attendance->check_out ? $attendance->check_out->format('H:i') : '' }}">
+                    <input type="time" name="check_out" value="{{ $attendance->check_out ? $attendance->check_out->format('H:i') : '' }}" {{ $attendance->correctRequest && $attendance->correctRequest->status === 'pending' ? 'readonly' : '' }}>
                     @error('check_out')
                         <span class="error-message">{{ $message }}</span>
                     @enderror
@@ -39,43 +39,50 @@
             <tr>
                 <th>休憩{{ $attendance->breakTimes->count() > 1 ? $index + 1 : '' }}</th>
                 <td>
-                    <input type="time" name="break_in[]" value="{{ $breakTime->break_in->format('H:i') }}">
+                    <input type="time" name="break_in[]" value="{{ $breakTime->break_in->format('H:i') }}" {{ $attendance->correctRequest && $attendance->correctRequest->status === 'pending' ? 'readonly' : '' }}>
                     <span class="time-separator">～</span>
-                    <input type="time" name="break_out[]" value="{{ $breakTime->break_out ? $breakTime->break_out->format('H:i') : '' }}">
-                    @error('break_in.*')
+                    <input type="time" name="break_out[]" value="{{ $breakTime->break_out ? $breakTime->break_out->format('H:i') : '' }}" {{ $attendance->correctRequest && $attendance->correctRequest->status === 'pending' ? 'readonly' : '' }}>
+                    @error("break_in.{$index}")
                         <span class="error-message">{{ $message }}</span>
                     @enderror
-                    @error('break_out.*')
+                    @error("break_out.{$index}")
                         <span class="error-message">{{ $message }}</span>
                     @enderror
                 </td>
             </tr>
             @endforeach
+
+            @php
+                $newIndex = $attendance->breakTimes->count();
+            @endphp
             <tr>
                 <th>休憩{{ $attendance->breakTimes->count() > 0 ? $attendance->breakTimes->count() + 1 : '' }}</th>
                 <td>
-                    <input type="time" name="break_in[]" value="">
+                    <input type="time" name="break_in[]" value="" {{ $attendance->correctRequest && $attendance->correctRequest->status === 'pending' ? 'readonly' : '' }}>
                     <span class="time-separator">～</span>
-                    <input type="time" name="break_out[]" value="">
-                    @error('break_in.*')
+                    <input type="time" name="break_out[]" value="" {{ $attendance->correctRequest && $attendance->correctRequest->status === 'pending' ? 'readonly' : '' }}>
+                    @error("break_in.{$newIndex}")
                         <span class="error-message">{{ $message }}</span>
                     @enderror
-                    @error('break_out.*')
+                    @error("break_out.{$newIndex}")
                         <span class="error-message">{{ $message }}</span>
                     @enderror
                 </td>
             </tr>
             <tr>
                 <th>備考</th>
-                <td><textarea name="note">{{ $attendance->note }}</textarea>
+                <td><textarea name="note" {{ $attendance->correctRequest && $attendance->correctRequest->status === 'pending' ? 'readonly' : '' }}>{{ $attendance->note }}</textarea>
                     @error('note')
                         <span class="error-message">{{ $message }}</span>
                     @enderror
                 </td>
             </tr>
         </table>
-
-        <button type="submit" class="detail-button">修正申請</button>
+        @if ($attendance->correctRequest && $attendance->correctRequest->status === 'pending')
+            <p class="pending-message">*承認待ちのため、修正はできません</p>
+        @else
+        <button type="submit" class="detail-button">修正</button>
+        @endif
     </form>
 </div>
 

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Attendance;
 use App\Models\AttendanceCorrectRequest;
 use App\Http\Requests\StampCorrectionRequest;
@@ -13,33 +12,29 @@ class StampCorrectionRequestController extends Controller
     {
         $attendance = Attendance::findOrFail($id);
 
-        $date = $attendance->check_in->format('Y-m-d');
-        $attendance->update([
-            'check_in' => $date . ' ' . $request->check_in,
-            'check_out' => $request->check_out ? $date . ' ' . $request->check_out : null,
-            'note' => $request->note,
-        ]);
-
-        $attendance->breakTimes()->delete();
-
         $breakIns = $request->input('break_in', []);
         $breakOuts = $request->input('break_out', []);
+        $breakTimesData = [];
 
         foreach ($breakIns as $index => $breakIn) {
-            if ($breakIn) {
-                $attendance->breakTimes()->create([
-                    'break_in' => $date . ' ' . $breakIn,
-                    'break_out' => !empty($breakOuts[$index]) ? $date . ' ' . $breakOuts[$index] : null,
-                ]);
-            }
+            if (!$breakIn) continue;
+
+            $breakTimesData[] = [
+                'break_in' => $breakIn,
+                'break_out' => $breakOuts[$index] ?? null,
+            ];
         }
 
         AttendanceCorrectRequest::create([
+            'user_id' => $request->user()->id,
             'attendance_id' => $attendance->id,
+            'updated_check_in' => $request->check_in,
+            'updated_check_out' => $request->check_out,
+            'updated_break_times' => $breakTimesData,
             'request_note' => $request->note,
             'status' => 'pending',
         ]);
 
-        return redirect('/attendance/list');
+        return redirect()->back();
     }
 }

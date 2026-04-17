@@ -13,8 +13,12 @@ return new class extends Migration
     {
         Schema::create('attendance_correct_requests', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->foreignId('attendance_id')->constrained()->onDelete('cascade');
-            $table->text('request_note')->nullable();
+            $table->time('updated_check_in');
+            $table->time('updated_check_out')->nullable();
+            $table->json('updated_break_times')->nullable();
+            $table->text('request_note');
             $table->string('status')->default('pending');
             $table->timestamps();
         });
