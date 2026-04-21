@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Auth;
 use App\Models\Attendance;
 use App\Models\AttendanceCorrectRequest;
 use App\Http\Requests\StampCorrectionRequest;
@@ -36,5 +37,14 @@ class StampCorrectionRequestController extends Controller
         ]);
 
         return redirect()->back();
+    }
+
+    public function index(){
+        $requests = AttendanceCorrectRequest::where('user_id', Auth::id())->with('attendance')->latest()->get();
+
+        $pendingRequests = $requests->where('status', 'pending');
+        $approvedRequests = $requests->where('status', 'approved');
+
+        return view('request_list', compact('pendingRequests', 'approvedRequests'));
     }
 }
