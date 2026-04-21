@@ -5,7 +5,6 @@ body {
 .detail-container {
     max-width: 1000px;
     margin: 90px auto;
-    padding: 0 20px;
 }
 
 .detail-title {
@@ -13,7 +12,6 @@ body {
     margin-bottom: 60px;
     padding-left: 15px;
     border-left: 7px solid #000;
-    display: inline-block;
 }
 
 .detail-table {
@@ -44,13 +42,21 @@ body {
 .detail-table td {
     font-size: 20px;
     color: #000000;
-    width: 70%;
 }
 
-.date-container {
+.time-wrapper {
     display: flex;
-    align-items: baseline;
-    gap: 80px;
+    align-items: center;
+}
+
+.time-separator {
+    margin: 0 80px;
+    flex-shrink: 0;
+}
+
+.date-year,
+.date-day {
+    width: auto;
 }
 
 .detail-table td a {
@@ -60,28 +66,27 @@ body {
 
 .detail-table input[type="time"],
 .detail-table textarea {
-    font-size: 18px;
-    padding: 8px 15px;
+    font-size: 20px;
     border: 1px solid #ccc;
     border-radius: 5px;
     font-weight: bold;
     font-family: inherit;
 }
 
+.detail-table input[type="time"] {
+    width: auto;
+}
+
 .detail-table input[type="time"]::-webkit-calendar-picker-indicator {
     display: none;
 }
 
-
-.time-separator {
-    margin: 0 30px;
-}
-
 .detail-table textarea {
-    width: 100%;
+    width: 250px;
     min-height: 40px;
     resize: vertical;
     vertical-align: middle;
+    resize: none;
 }
 
 .detail-button {
@@ -102,13 +107,24 @@ body {
     border-bottom: none;
 }
 
-.error-messages {
-    margin-bottom: 20px;
-}
-
 .error-message {
     display: block;
     color: red;
     font-size: 16px;
-    margin-bottom: 5px;
+    margin-top: 5px;
+}
+
+.pending-message {
+    display: block;
+    text-align: right;
+    color: #ff7a7a;
+    font-size: 21px;
+    font-weight: bold;
+    margin-top: 20px;
+    letter-spacing: 0.05em;
+}
+
+.detail-table input[type="time"][readonly],
+.detail-table textarea[readonly] {
+    border: none;
 }
