@@ -52,7 +52,7 @@ body {
 .attendance-table td {
     padding: 15px 20px;
     text-align: center;
-    border-bottom: 4px solid #dedede;
+    border-bottom: 3px solid #dedede;
     font-weight: bold;
 }
 
