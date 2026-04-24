@@ -6,12 +6,24 @@
 
 @section('content')
 <div class="list-container">
-    <h1 class="list-title">勤怠一覧</h1>
+    <h1 class="list-title">
+        @isset($isAdmin)
+            {{ $currentDate->format('Y年n月j日') }}の勤怠
+        @else
+            勤怠一覧
+        @endisset
+    </h1>
 
     <div class="month-nav">
-        <a href="/attendance/list?month={{ $prevMonth }}">← 前月</a>
-        <span><i class="fa-regular fa-calendar"></i> {{ $currentMonth->format('Y/m') }}</span>
-        <a href="/attendance/list?month={{ $nextMonth }}">翌月 →</a>
+        @isset($isAdmin)
+            <a href="/admin/attendance/list?date={{ $prevDate }}">← 前日</a>
+            <span><i class="fa-regular fa-calendar"></i> {{ $currentDate->format('Y/m/d') }}</span>
+            <a href="/admin/attendance/list?date={{ $nextDate }}">翌日 →</a>
+        @else
+            <a href="/attendance/list?month={{ $prevMonth }}">← 前月</a>
+            <span><i class="fa-regular fa-calendar"></i> {{ $currentMonth->format('Y/m') }}</span>
+            <a href="/attendance/list?month={{ $nextMonth }}">翌月 →</a>
+        @endisset>
     </div>
 
     <table class="attendance-table">

@@ -6,6 +6,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\StampCorrectionRequestController;
 use App\Http\Controllers\Admin\LoginController as AdminLoginController;
+use App\Http\Controllers\Admin\AttendanceController as AdminAttendanceController;
 
 Route::get('/', function () {
     return redirect('/attendance');
@@ -30,3 +31,10 @@ Route::middleware('auth')->group(function () {
 
 Route::get('/admin/login', [AdminLoginController::class, 'create']);
 Route::post('/admin/login', [AdminLoginController::class, 'store']);
+
+Route::prefix('admin')->group(function () {
+
+    Route::middleware('auth:admin')->group(function () {
+        Route::get('/admin/attendance/list', [AdminAttendanceController::class, 'list'])->name('admin.attendance.index');
+    });
+});
