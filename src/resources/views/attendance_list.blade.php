@@ -29,7 +29,7 @@
     <table class="attendance-table">
         <thead>
             <tr>
-                <th>日付</th>
+                <th>{{ isset($isAdmin) ? '名前' : '日付' }}</th>
                 <th>出勤</th>
                 <th>退勤</th>
                 <th>休憩</th>
@@ -38,20 +38,37 @@
             </tr>
         </thead>
         <tbody>
-            @foreach ($dailyAttendances as $day)
-            <tr>
-                <td>{{ $day['date']->format('m/d') }}({{ $day['date']->isoFormat('ddd') }})</td>
-                <td>{{ $day['attendance'] ? $day['attendance']->check_in->format('H:i') : '' }}</td>
-                <td>{{ $day['attendance'] && $day['attendance']->check_out ? $day['attendance']->check_out->format('H:i') : '' }}</td>
-                <td>{{ $day['attendance'] ? $day['attendance']->break_total : '' }}</td>
-                <td>{{ $day['attendance'] ? $day['attendance']->work_total : '' }}</td>
-                <td>
-                    @if($day['attendance'])
+            @isset($isAdmin)
+                @forelse ($attendances as $attendance)
+                <tr>
+                    <td>{{ $attendance->user->name }}</td>
+                    <td>{{ $attendance->check_in->format('H:i') }}</td>
+                    <td>{{ $attendance->check_out ? $attendance->check_out->format('H:i') : '' }}</td>
+                    <td>{{ $attendance->break_total }}</td>
+                    <td>{{ $attendance->work_total }}</td>
+                    <td><a href="/admin/attendance/{{ $attendance->id }}">詳細</a></td>
+                </tr>
+                @empty
+                <tr>
+                    <td colspan="6">この日の勤怠データはありません</td>
+                </tr>
+                @endforelse
+            @else
+                @foreach ($dailyAttendances as $day)
+                <tr>
+                    <td>{{ $day['date']->format('m/d') }}({{ $day['date']->isoFormat('ddd') }})</td>
+                    <td>{{ $day['attendance'] ? $day['attendance']->check_in->format('H:i') : '' }}</td>
+                    <td>{{ $day['attendance'] && $day['attendance']->check_out ? $day['attendance']->check_out->format('H:i') : '' }}</td>
+                    <td>{{ $day['attendance'] ? $day['attendance']->break_total : '' }}</td>
+                    <td>{{ $day['attendance'] ? $day['attendance']->work_total : '' }}</td>
+                    <td>
+                        @if($day['attendance'])
                             <a href="/attendance/detail/{{ $day['attendance']->id }}">詳細</a>
-                    @endif
-                </td>
-            </tr>
-@endforeach
+                        @endif
+                    </td>
+                </tr>
+                @endforeach
+            @endisset
         </tbody>
     </table>
 </div>

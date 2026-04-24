@@ -13,7 +13,7 @@ class LoginController extends Controller
 
         if (auth()->guard('admin')->attempt($credentials)) {
             $request->session()->regenerate();
-            return redirect('/admin/attendance');
+            return redirect('/admin/attendance/list');
         }
 
         return back()->withErrors([

@@ -40,6 +40,8 @@ class AttendanceController extends Controller
         $prevDate = $currentDate->copy()->subDay()->format('Y-m-d');
         $nextDate = $currentDate->copy()->addDay()->format('Y-m-d');
 
-        return view('admin/attendance/list', compact('attendances', 'currentDate', 'prevDate', 'nextDate'));
+        return view('attendance_list', compact('attendances', 'currentDate', 'prevDate', 'nextDate') + [
+            'isAdmin' => true,
+        ]);
     }
 }
