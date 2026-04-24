@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\StampCorrectionRequestController;
+use App\Http\Controllers\Admin\LoginController as AdminLoginController;
 
 Route::get('/', function () {
     return redirect('/attendance');
@@ -26,3 +27,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/stamp_correction_request/list', [StampCorrectionRequestController::class, 'index']);
     Route::post('/stamp_correction_request/{id}', [StampCorrectionRequestController::class, 'store']);
 });
+
+Route::get('/admin/login', [AdminLoginController::class, 'create']);
+Route::post('/admin/login', [AdminLoginController::class, 'store']);
