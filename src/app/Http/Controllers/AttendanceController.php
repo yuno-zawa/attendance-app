@@ -137,7 +137,7 @@ class AttendanceController extends Controller
         return view('attendance_list', compact('dailyAttendances', 'currentMonth', 'prevMonth', 'nextMonth'));
     }
 
-    public function detail($id)
+    public function detail( int $id)
     {
         $attendance = Attendance::with('breakTimes','user','correctRequest')->findOrFail($id);
 

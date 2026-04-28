@@ -23,7 +23,7 @@
             <a href="/attendance/list?month={{ $prevMonth }}">← 前月</a>
             <span><i class="fa-regular fa-calendar"></i> {{ $currentMonth->format('Y/m') }}</span>
             <a href="/attendance/list?month={{ $nextMonth }}">翌月 →</a>
-        @endisset>
+        @endisset
     </div>
 
     <table class="attendance-table">

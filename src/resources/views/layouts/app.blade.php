@@ -11,19 +11,32 @@
 </head>
 <body>
     <header class="header">
-    <img src="{{ asset('logo.png') }}" alt="ロゴ" class="header__logo">
-    @auth
-    <nav class="header__nav">
-        <a href="/attendance" class="header__link">勤怠</a>
-        <a href="/attendance/list" class="header__link">勤怠一覧</a>
-        <a href="/stamp_correction_request/list" class="header__link">申請</a>
-        <form method="POST" action="{{ route('logout') }}" class="header__logout-form">
-            @csrf
-            <button type="submit" class="header__link header__logout-button">ログアウト</button>
-        </form>
-    </nav>
-    @endauth
+        <img src="{{ asset('logo.png') }}" alt="ロゴ" class="header__logo">
+        @auth('web')
+        <nav class="header__nav">
+            <a href="/attendance" class="header__link">勤怠</a>
+            <a href="/attendance/list" class="header__link">勤怠一覧</a>
+            <a href="/stamp_correction_request/list" class="header__link">申請</a>
+            <form method="POST" action="{{ route('logout') }}" class="header__logout-form">
+                @csrf
+                <button type="submit" class="header__link header__logout-button">ログアウト</button>
+            </form>
+        </nav>
+        @endauth
+
+        @auth('admin')
+        <nav class="header__nav">
+            <a href="/admin/attendance/list" class="header__link">勤怠一覧</a>
+            <a href="/admin/staff/list" class="header__link">スタッフ一覧</a>
+            <a href="/stamp_correction_request/list" class="header__link">申請一覧</a>
+            <form method="POST" action="/admin/logout" class="header__logout-form">
+                @csrf
+                <button type="submit" class="header__link header__logout-button">ログアウト</button>
+            </form>
+        </nav>
+        @endauth
     </header>
+
     <main>
         @yield('content')
     </main>

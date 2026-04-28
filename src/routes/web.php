@@ -32,8 +32,8 @@ Route::middleware('auth')->group(function () {
 Route::get('/admin/login', [AdminLoginController::class, 'create']);
 Route::post('/admin/login', [AdminLoginController::class, 'store']);
 
-Route::prefix('admin')->group(function () {
-    Route::middleware('auth:admin')->group(function () {
+Route::prefix('admin')->middleware('admin')->group(function () {
         Route::get('/attendance/list', [AdminAttendanceController::class, 'list'])->name('admin.attendance.index');
+        Route::post('/logout', [AdminLoginController::class, 'destroy']);
+        Route::get('/attendance/{id}', [AttendanceController::class, 'detail']);
     });
-});
