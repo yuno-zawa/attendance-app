@@ -12,7 +12,7 @@
         $isPending = $attendance->correctRequest && $attendance->correctRequest->status === 'pending';
     @endphp
 
-    <form method="POST" action="/stamp_correction_request/{{ $attendance->id }}" novalidate>
+    <form method="POST" action="{{ isset($isAdmin) ? '/admin/attendance/' . $attendance->id : '/stamp_correction_request/' . $attendance->id }}" novalidate>
         @csrf
         <table class="detail-table">
             <tr>
@@ -105,10 +105,10 @@
             </tr>
         </table>
 
-        @if($isPending)
+        @if($isPending && !isset($isAdmin))
             <p class="pending-message">*承認待ちのため修正はできません。</p>
         @else
-            <button type="submit" class="detail-button">修正</button>
+            <button type="submit" class="detail-button">{{ isset($isAdmin) ? '修正' : '修正' }}</button>
         @endif
     </form>
 </div>

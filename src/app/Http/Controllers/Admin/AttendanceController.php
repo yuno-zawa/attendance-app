@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StampCorrectionRequest;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use App\Models\Attendance;
@@ -43,5 +44,44 @@ class AttendanceController extends Controller
         return view('attendance_list', compact('attendances', 'currentDate', 'prevDate', 'nextDate') + [
             'isAdmin' => true,
         ]);
+    }
+
+    public function detail($id){
+
+        $attendance = Attendance::with(['user', 'breakTimes','correctRequest'])->findOrFail($id);
+
+        return view('attendance_detail', [
+            'attendance' => $attendance,
+            'isAdmin' => true,
+        ]);
+    }
+
+    public function update(StampCorrectionRequest $request, $id)
+    {
+        $attendance = Attendance::findOrFail($id);
+
+        $date = $attendance->check_in->format('Y-m-d');
+
+        $attendance->update([
+            'check_in' => $date . ' ' . $request->check_in,
+            'check_out' => $request->check_out ? $date . ' ' . $request->check_out : null,
+            'note' => $request->note,
+        ]);
+
+        $attendance->breakTimes()->delete();
+
+        $breakIns = $request->input('break_in', []);
+        $breakOuts = $request->input('break_out', []);
+
+        foreach ($breakIns as $index => $breakIn) {
+            if ($breakIn) {
+                $attendance->breakTimes()->create([
+                    'break_in' => $date . ' ' . $breakIn,
+                    'break_out' => !empty($breakOuts[$index]) ? $date . ' ' . $breakOuts[$index] : null,
+                ]);
+            }
+        }
+
+        return redirect('/admin/attendance/' . $attendance->id);
     }
 }
