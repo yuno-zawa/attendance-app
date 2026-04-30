@@ -7,6 +7,7 @@ use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\StampCorrectionRequestController;
 use App\Http\Controllers\Admin\LoginController as AdminLoginController;
 use App\Http\Controllers\Admin\AttendanceController as AdminAttendanceController;
+use App\Http\Controllers\Admin\StaffController;
 
 Route::get('/', function () {
     return redirect('/attendance');
@@ -35,6 +36,7 @@ Route::post('/admin/login', [AdminLoginController::class, 'store']);
 Route::prefix('admin')->middleware('admin')->group(function () {
         Route::get('/attendance/list', [AdminAttendanceController::class, 'list'])->name('admin.attendance.index');
         Route::post('/logout', [AdminLoginController::class, 'destroy']);
-        Route::get('/attendance/{id}', [AttendanceController::class, 'detail']);
+        Route::get('/attendance/{id}', [AttendanceController::class, 'detail'])->name('admin.attendance.detail');
         Route::post('/attendance/{id}', [AdminAttendanceController::class, 'update']);
+        Route::get('/staff/list', [StaffController::class, 'index']);
     });
