@@ -7,7 +7,9 @@
 @section('content')
 <div class="list-container">
     <h1 class="list-title">
-        @isset($isAdmin)
+        @isset($user)
+            {{ $user->name }}さんの勤怠一覧
+        @elseif(isset($isAdmin))
             {{ $currentDate->format('Y年n月j日') }}の勤怠
         @else
             勤怠一覧
@@ -15,7 +17,11 @@
     </h1>
 
     <div class="month-nav">
-        @isset($isAdmin)
+        @isset($user)
+            <a href="/admin/attendance/staff/{{ $user->id }}?month={{ $prevMonth }}">← 前月</a>
+            <span><i class="fa-regular fa-calendar"></i> {{ $currentMonth->format('Y/m') }}</span>
+            <a href="/admin/attendance/staff/{{ $user->id }}?month={{ $nextMonth }}">翌月 →</a>
+        @elseif(isset($isAdmin))
             <a href="/admin/attendance/list?date={{ $prevDate }}">← 前日</a>
             <span><i class="fa-regular fa-calendar"></i> {{ $currentDate->format('Y/m/d') }}</span>
             <a href="/admin/attendance/list?date={{ $nextDate }}">翌日 →</a>
@@ -63,7 +69,11 @@
                     <td>{{ $day['attendance'] ? $day['attendance']->work_total : '' }}</td>
                     <td>
                         @if($day['attendance'])
-                            <a href="/attendance/detail/{{ $day['attendance']->id }}">詳細</a>
+                            @isset($user)
+                                <a href="/admin/attendance/{{ $day['attendance']->id }}">詳細</a>
+                            @else
+                                <a href="/attendance/detail/{{ $day['attendance']->id }}">詳細</a>
+                            @endisset
                         @endif
                     </td>
                 </tr>
