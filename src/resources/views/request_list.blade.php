@@ -36,7 +36,13 @@
                         <td>{{ $request->attendance->check_in->format('Y/m/d') }}</td>
                         <td>{{ $request->request_note }}</td>
                         <td>{{ $request->created_at->format('Y/m/d') }}</td>
-                        <td><a href="/attendance/detail/{{ $request->attendance_id }}">詳細</a></td>
+                        <td>
+                            @if(isset($isAdmin))
+                                <a href="/admin/stamp_correction_request/approve/{{ $request->id }}">詳細</a>
+                            @else
+                                <a href="/attendance/detail/{{ $request->attendance_id }}">詳細</a>
+                            @endif
+                        </td>
                     </tr>
                     @endforeach
                 </tbody>
@@ -63,7 +69,13 @@
                         <td>{{ $request->attendance->check_in->format('Y/m/d') }}</td>
                         <td>{{ $request->request_note }}</td>
                         <td>{{ $request->created_at->format('Y/m/d') }}</td>
-                        <td><a href="/attendance/detail/{{ $request->attendance_id }}">詳細</a></td>
+                        <td>
+                            @if(isset($isAdmin))
+                                <a href="/admin/stamp_correction_request/approve/{{ $request->id }}">詳細</a>
+                            @else
+                                <a href="/attendance/detail/{{ $request->attendance_id }}">詳細</a>
+                            @endif
+                        </td>
                     </tr>
                     @endforeach
                 </tbody>

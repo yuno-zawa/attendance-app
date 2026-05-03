@@ -89,19 +89,6 @@ body {
     resize: none;
 }
 
-.detail-button {
-    display: block;
-    margin: 40px 0 0 auto;
-    padding: 12px 40px;
-    font-size: 20px;
-    font-weight: bold;
-    background-color: #000;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
 .detail-table tr:last-child th,
 .detail-table tr:last-child td {
     border-bottom: none;
@@ -127,4 +114,28 @@ body {
 .detail-table input[type="time"][readonly],
 .detail-table textarea[readonly] {
     border: none;
+}
+
+.detail-button,
+.approved-message {
+    margin: 40px 0 0 auto;
+    padding: 12px 40px;
+    font-size: 20px;
+    font-weight: bold;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    text-align: center;
+    display: block;
+    width: fit-content;
+    margin-left: auto;
+}
+
+.detail-button {
+    background-color: #000;
+    cursor: pointer;
+}
+
+.approved-message {
+    background-color: #636363;
 }

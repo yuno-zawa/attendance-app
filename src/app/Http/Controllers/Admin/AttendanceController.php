@@ -138,4 +138,51 @@ class AttendanceController extends Controller
 
         return view('attendance_list', compact('dailyAttendances', 'currentMonth', 'prevMonth', 'nextMonth', 'user'));
     }
+
+    public function exportCsv(Request $request, $id)
+    {
+        $month = $request->query('month', Carbon::now()->format('Y-m'));
+        $currentMonth = Carbon::parse($month);
+        $user = User::findOrFail($id);
+
+        $attendances = Attendance::where('user_id', $id)
+            ->whereYear('check_in', $currentMonth->year)
+            ->whereMonth('check_in', $currentMonth->month)
+            ->with('breakTimes')
+            ->orderBy('check_in', 'asc')
+            ->get();
+
+        return response()->streamDownload(function () use ($attendances) {
+            $handle = fopen('php://output', 'w');
+
+            fputcsv($handle, ['日付', '出勤', '退勤', '休憩', '合計']);
+
+            foreach ($attendances as $attendance) {
+                $breakTotal = $attendance->breakTimes->reduce(function ($carry, $breakTime) {
+                    if ($breakTime->break_out) {
+                        return $carry + (int) $breakTime->break_in->diffInMinutes($breakTime->break_out, true);
+                    }
+                    return $carry;
+                }, 0);
+
+                $breakFormatted = floor($breakTotal / 60) . ':' . str_pad($breakTotal % 60, 2, '0', STR_PAD_LEFT);
+
+                $workFormatted = '';
+                if ($attendance->check_out) {
+                    $workTotal = (int) $attendance->check_in->diffInMinutes($attendance->check_out, true) - $breakTotal;
+                    $workFormatted = floor($workTotal / 60) . ':' . str_pad($workTotal % 60, 2, '0', STR_PAD_LEFT);
+                }
+
+                fputcsv($handle, [
+                    $attendance->check_in->format('Y/m/d'),
+                    $attendance->check_in->format('H:i'),
+                    $attendance->check_out ? $attendance->check_out->format('H:i') : '',
+                    $breakFormatted,
+                    $workFormatted,
+                ]);
+            }
+
+            fclose($handle);
+        }, $user->name . '_' . $currentMonth->format('Y_m') . '_勤怠.csv');
+    }
 }

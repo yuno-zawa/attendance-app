@@ -10,6 +10,8 @@
 
     @php
         $isPending = $attendance->correctRequest && $attendance->correctRequest->status === 'pending';
+        $isApproved = $attendance->correctRequest && $attendance->correctRequest->status === 'approved';
+        $isReadonly = $isPending || $isApproved;
     @endphp
 
     <form method="POST" action="{{ isset($isAdmin) ? '/admin/attendance/' . $attendance->id : '/stamp_correction_request/' . $attendance->id }}" novalidate>
@@ -33,9 +35,9 @@
                 <th>出勤・退勤</th>
                 <td>
                     <div class="time-wrapper">
-                        <input type="time" name="check_in" value="{{ $isPending ? $attendance->correctRequest->updated_check_in : $attendance->check_in->format('H:i') }}" {{ $isPending ? 'readonly' : '' }}>
+                        <input type="time" name="check_in" value="{{ $isPending ? $attendance->correctRequest->updated_check_in : $attendance->check_in->format('H:i') }}" {{ $isReadonly ? 'readonly' : '' }}>
                         <span class="time-separator">～</span>
-                        <input type="time" name="check_out" value="{{ $isPending ? $attendance->correctRequest->updated_check_out : ($attendance->check_out ? $attendance->check_out->format('H:i') : '') }}" {{ $isPending ? 'readonly' : '' }}>
+                        <input type="time" name="check_out" value="{{ $isPending ? $attendance->correctRequest->updated_check_out : ($attendance->check_out ? $attendance->check_out->format('H:i') : '') }}" {{ $isReadonly ? 'readonly' : '' }}>
                     </div>
                     @error('check_out')
                         <span class="error-message">{{ $message }}</span>
@@ -43,7 +45,7 @@
                 </td>
             </tr>
 
-            @if($isPending)
+            @if($isReadonly && $attendance->correctRequest)
                 @foreach($attendance->correctRequest->updated_break_times as $index => $break)
                 <tr>
                     <th>休憩{{ count($attendance->correctRequest->updated_break_times) > 1 ? $index + 1 : '' }}</th>
@@ -97,7 +99,7 @@
             <tr>
                 <th>備考</th>
                 <td>
-                    <textarea name="note" {{ $isPending ? 'readonly' : '' }}>{{ $isPending ? $attendance->correctRequest->request_note : $attendance->note }}</textarea>
+                    <textarea name="note" {{ $isReadonly ? 'readonly' : '' }}>{{ $isPending || $isApproved ? $attendance->correctRequest->request_note : $attendance->note }}</textarea>
                     @error('note')
                         <span class="error-message">{{ $message }}</span>
                     @enderror
@@ -105,12 +107,22 @@
             </tr>
         </table>
 
-        @if($isPending && !isset($isAdmin))
-            <p class="pending-message">*承認待ちのため修正はできません。</p>
+        @if(isset($isApproval) && $isPending)
+        </form>
+        <form method="POST" action="/admin/stamp_correction_request/approve/{{ $attendance->correctRequest->id }}">
+            @csrf
+            <button type="submit" class="detail-button">承認</button>
+        </form>
+        @elseif($isApproved)
+        </form>
+        <p class="approved-message">承認済み</p>
+        @elseif($isPending)
+        </form>
+        <p class="pending-message">*承認待ちのため修正はできません。</p>
         @else
-            <button type="submit" class="detail-button">{{ isset($isAdmin) ? '修正' : '修正' }}</button>
-        @endif
+        <button type="submit" class="detail-button">{{ isset($isAdmin) ? '修正' : '修正申請' }}</button>
     </form>
+    @endif
 </div>
 
 <style>
