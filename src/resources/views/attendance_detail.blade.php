@@ -121,6 +121,10 @@
         <p class="pending-message">*承認待ちのため修正はできません。</p>
         @else
         <button type="submit" class="detail-button">{{ isset($isAdmin) ? '修正' : '修正申請' }}</button>
+
+        @if(session('success'))
+           <p class="success-message">{{ session('success') }}</p>
+        @endif
     </form>
     @endif
 </div>

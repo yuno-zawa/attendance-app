@@ -37,7 +37,7 @@ Route::prefix('admin')->middleware('admin')->group(function () {
         Route::post('/logout', [AdminLoginController::class, 'destroy']);
         Route::get('/staff/list', [StaffController::class, 'index']);
         Route::get('/attendance/staff/{id}', [AdminAttendanceController::class, 'stafflist'])->name('admin.staff.attendance');
-        Route::get('/attendance/{id}', [AttendanceController::class, 'detail'])->name('admin.attendance.detail');
+        Route::get('/attendance/{id}', [AdminAttendanceController::class, 'detail'])->name('admin.attendance.detail');
         Route::post('/attendance/{id}', [AdminAttendanceController::class, 'update']);
         Route::post('/stamp_correction_request/{id}', [AdminStampCorrectionRequestController::class, 'store']);
         Route::get('/stamp_correction_request/approve/{id}', [AdminStampCorrectionRequestController::class, 'approve']);

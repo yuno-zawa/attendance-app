@@ -18,8 +18,12 @@ class AttendanceFactory extends Factory
      */
     public function definition(): array
     {
+        $checkIn = $this->faker->dateTimeBetween('-1 month', 'now');
+        $checkOut = (clone $checkIn)->modify('+8 hours');
         return [
-            //
+            'user_id' => User::factory(),
+            'check_in' => $checkIn,
+            'check_out' => $checkOut,
         ];
     }
 }

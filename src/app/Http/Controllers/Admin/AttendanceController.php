@@ -4,10 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StampCorrectionRequest;
-use Illuminate\Http\Request;
-use Carbon\Carbon;
 use App\Models\Attendance;
 use App\Models\User;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
 
 class AttendanceController extends Controller
 {
@@ -83,7 +83,7 @@ class AttendanceController extends Controller
             }
         }
 
-        return redirect('/admin/attendance/' . $attendance->id);
+        return redirect('/admin/attendance/' . $attendance->id)->with('success', '勤怠情報を修正しました。');
     }
 
     public function stafflist(Request $request , $id)

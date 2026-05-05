@@ -139,3 +139,10 @@ body {
 .approved-message {
     background-color: #636363;
 }
+
+.success-message {
+    color: #28a745 !important;
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}

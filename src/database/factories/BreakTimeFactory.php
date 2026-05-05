@@ -18,7 +18,8 @@ class BreakTimeFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'break_in' => $this->faker->time('H:i'),
+            'break_out' => $this->faker->time('H:i'),
         ];
     }
 }
