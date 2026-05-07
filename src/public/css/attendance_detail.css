@@ -82,11 +82,12 @@ body {
 }
 
 .detail-table textarea {
-    width: 250px;
+    width: 300px;
     min-height: 40px;
     resize: vertical;
     vertical-align: middle;
     resize: none;
+    font-size: 20px;
 }
 
 .detail-table tr:last-child th,
@@ -144,5 +145,4 @@ body {
     color: #28a745 !important;
     font-size: 18px;
     font-weight: bold;
-    margin-bottom: 20px;
 }

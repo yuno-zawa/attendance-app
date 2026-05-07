@@ -24,6 +24,7 @@ class AttendanceFactory extends Factory
             'user_id' => User::factory(),
             'check_in' => $checkIn,
             'check_out' => $checkOut,
+            'note' => fake()->randomElement(['体調不良のため', '電車遅延のため', '修正依頼', 'シフト変更']),
         ];
     }
 }
