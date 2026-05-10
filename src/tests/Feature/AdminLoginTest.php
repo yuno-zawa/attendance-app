@@ -3,17 +3,17 @@
 namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use App\Models\Admin;
 use Tests\TestCase;
-use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 
-class AuthLoginTest extends TestCase
+class AdminLoginTest extends TestCase
 {
     use RefreshDatabase;
 
     public function test_メールアドレスが未入力の場合バリデーションメッセージが表示される()
     {
-        User::factory()->create([
+        Admin::factory()->create([
             'email' => 'test@testmail.com',
             'password' => Hash::make('password'),
         ]);
@@ -23,16 +23,16 @@ class AuthLoginTest extends TestCase
             'password' => 'password',
         ];
 
-        $response = $this->post('/login', $data);
+        $response = $this->post('/admin/login', $data);
 
         $response->assertSessionHasErrors(['email' => 'メールアドレスを入力してください']);
     }
 
     public function test_パスワードが未入力の場合バリデーションメッセージが表示される()
     {
-        User::factory()->create([
+        Admin::factory()->create([
             'email' => 'test@testmail.com',
-            'password' => Hash::make('password'),
+            'password' => Hash::make('pssword'),
         ]);
 
         $data = [
@@ -40,14 +40,14 @@ class AuthLoginTest extends TestCase
             'password' => '',
         ];
 
-        $response = $this->post('/login', $data);
+        $response = $this->post('/admin/login', $data);
 
         $response->assertSessionHasErrors(['password' => 'パスワードを入力してください']);
     }
 
     public function test_登録内容と一致しない場合バリデーションメッセージが表示される()
     {
-        User::factory()->create([
+        Admin::factory()->create([
             'email' => 'test@testmail.com',
             'password' => Hash::make('password'),
         ]);
@@ -57,7 +57,7 @@ class AuthLoginTest extends TestCase
             'password' => 'passwordd',
         ];
 
-        $response = $this->post('/login', $data);
+        $response = $this->post('/admin/login', $data);
 
         $response->assertSessionHasErrors(['email' => 'ログイン情報が登録されていません']);
     }
