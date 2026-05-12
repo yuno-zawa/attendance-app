@@ -141,6 +141,10 @@ class AttendanceController extends Controller
     {
         $attendance = Attendance::with('breakTimes','user','correctRequest')->findOrFail($id);
 
+        if ($attendance->user_id !== Auth::id()) {
+        abort(403);
+        }
+
         return view('attendance_detail', compact('attendance'));
     }
 }
