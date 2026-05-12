@@ -21,6 +21,7 @@ docker compose exec php bash
 cp .env.example .env
 composer install
 php artisan key:generate
+chmod -R 777 storage
 php artisan migrate
 php artisan db:seed
 ```
