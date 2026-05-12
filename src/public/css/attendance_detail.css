@@ -1,0 +1,148 @@
+body {
+    background-color: #f0eff2;
+}
+
+.detail-container {
+    max-width: 1000px;
+    margin: 90px auto;
+}
+
+.detail-title {
+    font-size: 35px;
+    margin-bottom: 60px;
+    padding-left: 15px;
+    border-left: 7px solid #000;
+}
+
+.detail-table {
+    width: 100%;
+    background-color: white;
+    border-radius: 10px;
+    table-layout: fixed;
+}
+
+.detail-table th,
+.detail-table td {
+    padding: 25px 40px;
+    text-align: left;
+    border-bottom: 4px solid #dedede;
+    font-weight: bold;
+    height: 40px;
+    vertical-align: middle;
+}
+
+.detail-table th {
+    background-color: white;
+    color: #797979;
+    font-size: 20px;
+    border-radius: 10px;
+    width: 30%;
+}
+
+.detail-table td {
+    font-size: 20px;
+    color: #000000;
+}
+
+.time-wrapper {
+    display: flex;
+    align-items: center;
+}
+
+.time-separator {
+    margin: 0 80px;
+    flex-shrink: 0;
+}
+
+.date-year,
+.date-day {
+    width: auto;
+}
+
+.detail-table td a {
+    color: #000;
+    text-decoration: none;
+}
+
+.detail-table input[type="time"],
+.detail-table textarea {
+    font-size: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-weight: bold;
+    font-family: inherit;
+}
+
+.detail-table input[type="time"] {
+    width: auto;
+}
+
+.detail-table input[type="time"]::-webkit-calendar-picker-indicator {
+    display: none;
+}
+
+.detail-table textarea {
+    width: 300px;
+    min-height: 40px;
+    resize: vertical;
+    vertical-align: middle;
+    resize: none;
+    font-size: 20px;
+}
+
+.detail-table tr:last-child th,
+.detail-table tr:last-child td {
+    border-bottom: none;
+}
+
+.error-message {
+    display: block;
+    color: red;
+    font-size: 16px;
+    margin-top: 5px;
+}
+
+.pending-message {
+    display: block;
+    text-align: right;
+    color: #ff7a7a;
+    font-size: 21px;
+    font-weight: bold;
+    margin-top: 20px;
+    letter-spacing: 0.05em;
+}
+
+.detail-table input[type="time"][readonly],
+.detail-table textarea[readonly] {
+    border: none;
+}
+
+.detail-button,
+.approved-message {
+    margin: 40px 0 0 auto;
+    padding: 12px 40px;
+    font-size: 20px;
+    font-weight: bold;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    text-align: center;
+    display: block;
+    width: fit-content;
+    margin-left: auto;
+}
+
+.detail-button {
+    background-color: #000;
+    cursor: pointer;
+}
+
+.approved-message {
+    background-color: #636363;
+}
+
+.success-message {
+    color: #28a745 !important;
+    font-size: 18px;
+    font-weight: bold;
+}

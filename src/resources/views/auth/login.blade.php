@@ -6,8 +6,8 @@
 
 @section('content')
 <div class="auth-container">
-    <h1 class="auth-title">ログイン</h1>
-    <form method="POST" action="{{ route('login') }}" class="login-form">
+    <h1 class="auth-title">{{ $title ?? 'ログイン' }}</h1>
+    <form method="POST" action="{{ $action ?? '/login'}}" class="login-form">
         @csrf
         <div class="form-group">
             <label for="email" class="form-label">メールアドレス</label>
@@ -23,8 +23,10 @@
                 <span class="error-message">{{ $message }}</span>
             @enderror
         </div>
-        <button type="submit" class="login-button">ログインする</button>
+        <button type="submit" class="login-button">{{ $button ?? 'ログインする' }}</button>
     </form>
-    <a href="{{ route('register') }}" class="register-link">会員登録はこちら</a>
+    @if(!@isset($isAdmin))
+        <a href="{{ route('register') }}" class="register-link">会員登録はこちら</a>
+    @endif
 </div>
 @endsection

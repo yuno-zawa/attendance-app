@@ -1,0 +1,47 @@
+body {
+    background-color: #f0eff2;
+}
+
+.staff-list-container {
+    max-width: 1000px;
+    margin: 90px auto;
+    padding: 0 20px;
+}
+
+.staff-list-title {
+    font-size: 35px;
+    margin-bottom: 100px;
+    padding-left: 15px;
+    border-left: 7px solid #000;
+    display: inline-block;
+}
+
+.staff-table {
+    width: 100%;
+    background-color: white;
+    border-radius: 10px;
+    table-layout: fixed;
+}
+
+.staff-table th,
+.staff-table td {
+    padding: 15px 20px;
+    text-align: center;
+    border-bottom: 3px solid #dedede;
+    font-weight: bold;
+    color: #797979;
+    font-size: 20px;
+}
+
+.staff-table thead th {
+    border-bottom: 4px solid #dedede;
+}
+
+.staff-table td a {
+    color: #000;
+    text-decoration: none;
+}
+
+.staff-table tr:last-child td {
+    border-bottom: none;
+}
