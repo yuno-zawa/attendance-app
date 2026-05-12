@@ -9,17 +9,21 @@
 * MailHog (メール認証用)
 
 ## Dockerビルド
+```
 git clone https://github.com/yuno-zawa/attendance-app.git
 cd attendance-app
 docker compose up -d --build
+```
 
 ## Laravel環境構築
+```
 docker compose exec php bash
 cp .env.example .env
 composer install
 php artisan key:generate
 php artisan migrate
 php artisan db:seed
+```
 
 ### ログイン情報
 環境構築の手順にて`php artisan db:seed`を実行することで、以下のテスト用アカウントが作成されます。
@@ -42,8 +46,10 @@ php artisan db:seed
 ![ER図](er-diagram.png)
 
 ## テスト実行方法
+```
 docker compose exec php bash
 php artisan test
+```
 
 ## テストケース一覧
 テストケースの詳細は以下のスプレッドシートを参照してください。
