@@ -88,7 +88,7 @@ class AdminAttendanceDetailTest extends TestCase
             'note' => 'テスト',
         ]);
 
-        $response->assertSessionHasErrors(['break_out.0' => '休憩時間が不適切な値です']);
+        $response->assertSessionHasErrors(['break_out.0' => '休憩時間もしくは退勤時間が不適切な値です']);
     }
 
     public function test_備考欄が未入力の場合エラーメッセージが表示される()

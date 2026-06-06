@@ -17,9 +17,9 @@ class AttendanceController extends Controller
         $currentDate = Carbon::parse($date);
 
         $attendances = Attendance::with(['user', 'breakTimes'])
-        ->whereDate('check_in', $currentDate)
-        ->orderBy('check_out', 'asc')
-        ->get();
+            ->whereDate('check_in', $currentDate)
+            ->orderBy('check_out', 'asc')
+            ->get();
 
         foreach ($attendances as $attendance) {
             $breakTotal = $attendance->breakTimes->reduce(function ($carry, $breakTime) {
@@ -47,9 +47,9 @@ class AttendanceController extends Controller
         ]);
     }
 
-    public function detail($id){
-
-        $attendance = Attendance::with(['user', 'breakTimes','correctRequest'])->findOrFail($id);
+    public function detail($id)
+    {
+        $attendance = Attendance::with(['user', 'breakTimes', 'correctRequest'])->findOrFail($id);
 
         return view('attendance_detail', [
             'attendance' => $attendance,
@@ -86,7 +86,7 @@ class AttendanceController extends Controller
         return redirect('/admin/attendance/' . $attendance->id)->with('success', '勤怠情報を修正しました。');
     }
 
-    public function stafflist(Request $request , $id)
+    public function stafflist(Request $request, $id)
     {
         $month = $request->query('month', Carbon::now()->format('Y-m'));
         $currentMonth = Carbon::parse($month);
@@ -103,8 +103,8 @@ class AttendanceController extends Controller
 
         for ($day = 1; $day <= $daysInMonth; $day++) {
             $date = $currentMonth->copy()->day($day);
-            $attendance = $attendances->first(function ($a) use ($date) {
-                return $a->check_in->format('Y-m-d') === $date->format('Y-m-d');
+            $attendance = $attendances->first(function ($att) use ($date) {
+                return $att->check_in->format('Y-m-d') === $date->format('Y-m-d');
             });
 
             if ($attendance) {
@@ -118,7 +118,7 @@ class AttendanceController extends Controller
                 $attendance->break_total = floor($breakTotal / 60) . ':' . str_pad($breakTotal % 60, 2, '0', STR_PAD_LEFT);
 
                 if ($attendance->check_out) {
-                    $workTotal = (int) $attendance->check_in->diffInMinutes($attendance->check_out,     true) - $breakTotal;
+                    $workTotal = (int) $attendance->check_in->diffInMinutes($attendance->check_out, true) - $breakTotal;
                     $attendance->work_total = floor($workTotal / 60) . ':' . str_pad($workTotal % 60, 2, '0', STR_PAD_LEFT);
                 } else {
                     $attendance->work_total = '';

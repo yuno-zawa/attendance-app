@@ -12,14 +12,14 @@ class AttendanceController extends Controller
     public function index()
     {
         $attendance = Attendance::where('user_id', Auth::id())
-        ->WhereDate('check_in', Carbon::today())
-        ->first();
+            ->whereDate('check_in', Carbon::today())
+            ->first();
 
         if (!$attendance) {
             $status = 'off';
-        }elseif($attendance->check_out) {
+        } elseif ($attendance->check_out) {
             $status = 'finished';
-        }elseif($attendance->breakTimes()->whereNull('break_out')->exists()) {
+        } elseif ($attendance->breakTimes()->whereNull('break_out')->exists()) {
             $status = 'break';
         } else {
             $status = 'working';
@@ -41,8 +41,8 @@ class AttendanceController extends Controller
     public function checkOut(Request $request)
     {
         $attendance = Attendance::where('user_id', Auth::id())
-        ->WhereDate('check_in', Carbon::today())
-        ->first();
+            ->whereDate('check_in', Carbon::today())
+            ->first();
 
         if ($attendance && !$attendance->check_out) {
             $attendance->update([
@@ -56,8 +56,8 @@ class AttendanceController extends Controller
     public function breakIn(Request $request)
     {
         $attendance = Attendance::where('user_id', Auth::id())
-        ->WhereDate('check_in', Carbon::today())
-        ->first();
+            ->whereDate('check_in', Carbon::today())
+            ->first();
 
         if ($attendance && !$attendance->check_out) {
             $attendance->breakTimes()->create([
@@ -71,8 +71,8 @@ class AttendanceController extends Controller
     public function breakOut(Request $request)
     {
         $attendance = Attendance::where('user_id', Auth::id())
-        ->WhereDate('check_in', Carbon::today())
-        ->first();
+            ->whereDate('check_in', Carbon::today())
+            ->first();
 
         if ($attendance) {
             $breakTime = $attendance->breakTimes()->whereNull('break_out')->first();
@@ -103,8 +103,8 @@ class AttendanceController extends Controller
 
         for ($day = 1; $day <= $daysInMonth; $day++) {
             $date = $currentMonth->copy()->day($day);
-            $attendance = $attendances->first(function ($a) use ($date) {
-                return $a->check_in->format('Y-m-d') === $date->format('Y-m-d');
+            $attendance = $attendances->first(function ($att) use ($date) {
+                return $att->check_in->format('Y-m-d') === $date->format('Y-m-d');
             });
 
             if ($attendance) {
@@ -118,7 +118,7 @@ class AttendanceController extends Controller
                 $attendance->break_total = floor($breakTotal / 60) . ':' . str_pad($breakTotal % 60, 2, '0', STR_PAD_LEFT);
 
                 if ($attendance->check_out) {
-                    $workTotal = (int) $attendance->check_in->diffInMinutes($attendance->check_out,     true) - $breakTotal;
+                    $workTotal = (int) $attendance->check_in->diffInMinutes($attendance->check_out, true) - $breakTotal;
                     $attendance->work_total = floor($workTotal / 60) . ':' . str_pad($workTotal % 60, 2, '0', STR_PAD_LEFT);
                 } else {
                     $attendance->work_total = '';
@@ -137,12 +137,12 @@ class AttendanceController extends Controller
         return view('attendance_list', compact('dailyAttendances', 'currentMonth', 'prevMonth', 'nextMonth'));
     }
 
-    public function detail( int $id)
+    public function detail(int $id)
     {
-        $attendance = Attendance::with('breakTimes','user','correctRequest')->findOrFail($id);
+        $attendance = Attendance::with('breakTimes', 'user', 'correctRequest')->findOrFail($id);
 
         if ($attendance->user_id !== Auth::id()) {
-        abort(403);
+            abort(403);
         }
 
         return view('attendance_detail', compact('attendance'));

@@ -45,7 +45,7 @@ class StampCorrectionRequest extends FormRequest
                     }
 
                     if ($checkOut && $breakOut > $checkOut) {
-                        $validator->errors()->add("break_out.{$index}", '休憩時間が不適切な値です');
+                        $validator->errors()->add("break_out.{$index}", '休憩時間もしくは退勤時間が不適切な値です');
                     }
                 }
             }
